@@ -1,0 +1,24 @@
+Auth
+  Android
+    Get the auth key
+      Auth.startOAuth2Authentication(UserActivity.this, <app key string>);
+    Create the config
+      DbxRequestConfig requestConfig = DbxRequestConfig.newBuilder(<identifier string, arbitrary - db suggests project:version or something similar>)
+        .withHttpRequestor(new OkHttp3Requestor(OkHttp3Requestor.defaultOkHttpClient()))
+        .build();
+  Desktop
+    Have the auth key some other way I guess?
+    Create the config
+      DbxRequestConfig requestConfig = new DbxRequestConfig(<identifier string, arbitrary - db suggests project:version or something similar>);
+  Both
+    Create the client proper
+      sDbxClient = new DbxClientV2(requestConfig, accessToken);
+    Get list of items in folder:
+      sDbxClient.files().listFolder(<path>)
+    Upload from an InputStream `in`:
+      FileMetadata metadata = sDbxClient.files().uploadBuilder("/test.txt").uploadAndFinish(in);
+    Download to an OutputStream:
+      DbxDownloader<FileMetadata> downloader = sDbxClient.files().download(</-initial file path to download>);
+      OutputStream out = new FileOutputStream("test.txt");
+      downloader.download(out);
+    Most things can be done from the output of the .files() call
