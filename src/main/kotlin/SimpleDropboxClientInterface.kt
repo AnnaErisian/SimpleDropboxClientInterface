@@ -49,4 +49,15 @@ interface SimpleDropboxClientInterface {
      */
     fun uploadTextFile(path: String, contents: String, charset: Charset = StandardCharsets.UTF_8)
 
+    /**
+     * @param path: file location
+     * @return true if the file exists, false if there is nothing or a folder at the specified location
+     */
+    fun fileExists(path: String): Boolean
+
+    /**
+     * @param path: folder location
+     * @return true if the folder exists, false if there is nothing or a file at the specified location
+     */
+    fun folderExists(path: String): Boolean
 }
