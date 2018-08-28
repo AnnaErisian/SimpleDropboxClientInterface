@@ -11,7 +11,7 @@ import java.io.OutputStream
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 
-object SimpleDropboxClientDesktop : SimpleDropboxClientInterface {
+object SimpleDropboxClientWeb : SimpleDropboxClientInterface {
 
     private lateinit var client: DbxClientV2
 

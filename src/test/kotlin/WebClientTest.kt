@@ -7,9 +7,9 @@ import org.junit.Test
 import org.junit.Before
 import java.io.*
 
-class SimpleDropboxClientDesktopTest {
+class SimpleDropboxClientWebTest {
 
-    var client = SimpleDropboxClientDesktop
+    var client = SimpleDropboxClientWeb
 
     @Before
     fun prepareClient() {
