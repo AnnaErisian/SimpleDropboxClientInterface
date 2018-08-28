@@ -6,14 +6,6 @@ import java.nio.charset.StandardCharsets
 
 interface SimpleDropboxClientInterface {
     /**
-     * Prepare the dropbox client to make requests.
-     * Must be called before any other function
-     * @param appKey: your application key, assigned by Dropbox
-     * @param identifier: an identifier string.  Arbitrary, but Dropbox suggests including your project name and version
-     */
-    fun init(appKey: String, identifier: String? = null)
-
-    /**
      * Returns a list of all files in a given directory
      * @param path: directory
      * @return A collection of objects which hold the name, path, and other data about the items in the directory

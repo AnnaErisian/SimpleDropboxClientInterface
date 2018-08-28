@@ -15,7 +15,13 @@ object SimpleDropboxClientWeb : SimpleDropboxClientInterface {
 
     private lateinit var client: DbxClientV2
 
-    override fun init(appKey: String, identifier: String?) {
+    /**
+     * Prepare the dropbox client to make requests.
+     * Must be called before any other function
+     * @param appKey: your application key, assigned by Dropbox
+     * @param identifier: an identifier string.  Arbitrary, but Dropbox suggests including your project name and version
+     */
+    fun init(appKey: String, identifier: String?) {
         val requestConfig = DbxRequestConfig(identifier)
         client = DbxClientV2(requestConfig, appKey)
     }
