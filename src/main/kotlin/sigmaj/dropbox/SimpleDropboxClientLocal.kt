@@ -1,9 +1,9 @@
+package sigmaj.dropbox
+
 import com.dropbox.core.v2.files.FileMetadata
 import com.dropbox.core.v2.files.FolderMetadata
 import com.dropbox.core.v2.files.Metadata
-import java.io.File
-import java.io.InputStream
-import java.io.OutputStream
+import java.io.*
 import java.nio.charset.Charset
 
 object SimpleDropboxClientLocal : SimpleDropboxClientInterface {
@@ -16,7 +16,7 @@ object SimpleDropboxClientLocal : SimpleDropboxClientInterface {
      * @param root: root directory of local dropbox folder
      */
     fun init(root: String) {
-        this.root = root
+        SimpleDropboxClientLocal.root = root
     }
 
     override fun getFilesInDirectory(path: String): Collection<Metadata> {
@@ -40,27 +40,50 @@ object SimpleDropboxClientLocal : SimpleDropboxClientInterface {
     }
 
     override fun getFile(path: String, destination: OutputStream) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val f = File(root + path)
+        val istream = f.inputStream()
+        val data = ByteArray(8192)
+        var bytesRead = istream.read(data, 0, data.size)
+        while (bytesRead > 0) {
+            destination.write(data, 0, bytesRead)
+            destination.flush()
+            bytesRead = istream.read(data, 0, data.size)
+        }
+        istream.close()
     }
 
     override fun getTextFile(path: String, charset: Charset): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val stream = ByteArrayOutputStream()
+        getFile(path, stream)
+        return String(stream.toByteArray(), charset)
     }
 
     override fun uploadFile(path: String, source: InputStream) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val f = File(root + path)
+        val ostream = f.outputStream()
+        val data = ByteArray(8192)
+        var bytesRead = source.read(data, 0, data.size)
+        while (bytesRead > 0) {
+            ostream.write(data, 0, bytesRead)
+            ostream.flush()
+            bytesRead = source.read(data, 0, data.size)
+        }
+        ostream.close()
     }
 
     override fun uploadTextFile(path: String, contents: String, charset: Charset) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val stream = ByteArrayInputStream(contents.toByteArray())
+        uploadFile(path, stream)
     }
 
     override fun fileExists(path: String): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val f = File(root + path)
+        return f.exists() && f.isFile
     }
 
     override fun folderExists(path: String): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val f = File(root + path)
+        return f.exists() && f.isDirectory
     }
 
 }

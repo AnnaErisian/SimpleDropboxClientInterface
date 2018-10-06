@@ -1,3 +1,5 @@
+package sigmaj.dropbox
+
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.FileMetadata
@@ -9,7 +11,6 @@ import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.io.OutputStream
 import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
 
 object SimpleDropboxClientWeb : SimpleDropboxClientInterface {
 

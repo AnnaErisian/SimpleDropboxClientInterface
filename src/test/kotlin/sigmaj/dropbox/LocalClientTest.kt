@@ -1,34 +1,30 @@
+package sigmaj.dropbox
+
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.DeleteErrorException
 import org.junit.After
 import org.junit.Assert
-import org.junit.Test
 import org.junit.Before
+import org.junit.Test
 import java.io.*
 
-class SimpleDropboxClientWebTest {
+class SimpleDropboxClientLocalTest {
 
-    var client = SimpleDropboxClientWeb
+    var client = SimpleDropboxClientLocal
+
+    private val rootLocalPath = System.getProperty("user.home") + "\\Dropbox"
 
     @Before
     fun prepareClient() {
-        val accessToken = javaClass.getResourceAsStream("authToken.txt").bufferedReader().readText()
-        client.init(accessToken, "Kotlin Dropbox Wrapper Test")
+        client.init(rootLocalPath)
     }
 
     @After
     fun deleteUploadedTestFiles() {
-        try {
-            val accessToken = javaClass.getResourceAsStream("authToken.txt").bufferedReader().readText()
-            val requestConfig = DbxRequestConfig("Kotlin Dropbox Wrapper Test")
-            val rawClient = DbxClientV2(requestConfig, accessToken)
-            rawClient.files().deleteV2("/dbxtests/testfile-u")
-        } catch (e: DeleteErrorException) {
-            print(e)
-        }
+        val f = File(rootLocalPath + "/dbxtests/testfile-u")
+        f.delete()
     }
-
     @Test
     fun testDownloadFile() {
         val fileStream = ByteArrayOutputStream()
@@ -39,7 +35,7 @@ class SimpleDropboxClientWebTest {
 
         fileStream.reset()
 
-        val theChaos = javaClass.getResourceAsStream("theChaos.txt").bufferedReader().readText()
+        val theChaos = javaClass.getResourceAsStream("/theChaos.txt").bufferedReader().readText()
         client.getFile("/dbxtests/testfile-d2", fileStream)
         val chaosDL = String(fileStream.toByteArray())
         Assert.assertEquals(chaosDL, theChaos)
@@ -54,7 +50,7 @@ class SimpleDropboxClientWebTest {
 
         fileStream.reset()
 
-        val theChaos = javaClass.getResourceAsStream("theChaos.txt").bufferedReader().readText()
+        val theChaos = javaClass.getResourceAsStream("/theChaos.txt").bufferedReader().readText()
         val chaosDL = client.getTextFile("/dbxtests/testfile-d2")
         Assert.assertEquals(chaosDL, theChaos)
     }
@@ -78,6 +74,14 @@ class SimpleDropboxClientWebTest {
         client.uploadFile("/dbxtests/testfile-u", ips)
         val loremDL = client.getTextFile("/dbxtests/testfile-u")
         Assert.assertEquals(lorem, loremDL)
+    }
+
+    @Test
+    fun testUploadBigTextFile() {
+        val theChaos = javaClass.getResourceAsStream("/theChaos.txt").bufferedReader().readText()
+        client.uploadTextFile("/dbxtests/testfile-u", theChaos)
+        val loremDL = client.getTextFile("/dbxtests/testfile-u")
+        Assert.assertEquals(theChaos, loremDL)
     }
 
     @Test

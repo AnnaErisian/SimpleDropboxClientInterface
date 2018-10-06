@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SimpleDropboxAccessor">
+    <output-path>$PROJECT_DIR$/out/artifacts/SimpleDropboxAccessor</output-path>
+    <root id="archive" name="SimpleDropboxAccessor.jar">
+      <element id="module-output" name="dropboxSimpleAccessor_main" />
+      <element id="module-source" name="dropboxSimpleAccessor_main" />
+    </root>
+  </artifact>
+</component>
